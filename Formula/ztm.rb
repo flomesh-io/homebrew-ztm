@@ -18,7 +18,7 @@ class Ztm < Formula
     clangpp = `xcrun --find clang++`.chomp
 
     cd "gui" do
-      system "npm", "install", *std_npm_args(only: :build)
+      system "npm", "install", *std_npm_args, "--production=false"
       system "npm", "run", "build"
       # system "npm", "run", "build:apps"
       system "npm", "run", "build:tunnel"
@@ -29,7 +29,7 @@ class Ztm < Formula
     system "git", "submodule", "update", "--init"
 
     cd "pipy" do
-      system "npm", "install", *std_npm_args(only: :build)
+      system "npm", "install", *std_npm_args, "--production=false"
     end
 
     version = ENV["ZTM_VERSION"] || `git describe --abbrev=0 --tags`.strip
