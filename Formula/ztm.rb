@@ -19,6 +19,7 @@ class Ztm < Formula
 
     cd "gui" do
       system "npm", "install", *std_npm_args, "--production=false"
+      bin.install_symlink Dir["#{libexec}/bin/*"]
       system "npm", "run", "build"
       # system "npm", "run", "build:apps"
       system "npm", "run", "build:tunnel"
@@ -30,6 +31,7 @@ class Ztm < Formula
 
     cd "pipy" do
       system "npm", "install", *std_npm_args, "--production=false"
+      bin.install_symlink Dir["#{libexec}/bin/*"]
     end
 
     version = ENV["ZTM_VERSION"] || `git describe --abbrev=0 --tags`.strip
