@@ -27,7 +27,7 @@ class Ztm < Formula
     end
 
     system "git", "submodule", "update", "--init"
-    
+
     cd "pipy" do
       system "npm", "install", *std_npm_args
     end
