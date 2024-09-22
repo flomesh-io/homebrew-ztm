@@ -4,6 +4,7 @@ class Ztm < Formula
   url "https://github.com/flomesh-io/ztm.git", tag: "v0.2.0"
   license "Apache-2.0"
 
+  depends_on "ninja" => :build
   depends_on "cmake" => :build
   depends_on "node" => :build
   depends_on "openssl@3" => :build
@@ -77,8 +78,8 @@ class Ztm < Formula
         "-DPIPY_DEFAULT_OPTIONS='repo://ztm/cli --args'",
       ]
 
-      system "cmake", "..", *cmake_args
-      system "make", "-j"
+      system "cmake", "-G", "Ninja", "..", *cmake_args
+      system "ninja"
     end
 
     bin.install "pipy/bin/pipy" => "ztm"
