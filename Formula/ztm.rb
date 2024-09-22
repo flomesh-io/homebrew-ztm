@@ -14,7 +14,6 @@ class Ztm < Formula
     major_version = node_version.split(".")[0].delete_prefix("v").to_i
     odie "Node.js version 16 or later is required. Detected: #{node_version}" if major_version < 16
 
-  
     openssl = Formula["openssl@3"]
     clang = `xcrun --find clang`.chomp
     clangpp = `xcrun --find clang++`.chomp
@@ -65,7 +64,7 @@ class Ztm < Formula
         "-DCMAKE_CXX_FLAGS=-stdlib=libc++",
         "-DPIPY_CODEBASES=ON",
         "-DPIPY_CUSTOM_CODEBASES=ztm/ca:../ca,ztm/hub:../hub,ztm/agent:../agent,ztm/cli:../cli",
-        '-DPIPY_DEFAULT_OPTIONS=repo://ztm/cli --args'
+        "-DPIPY_DEFAULT_OPTIONS='repo://ztm/cli --args'",
       ]
 
       system "cmake", "..", *cmake_args
@@ -79,4 +78,3 @@ class Ztm < Formula
     system "#{bin}/ztm", "--version"
   end
 end
-
