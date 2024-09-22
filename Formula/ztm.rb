@@ -4,7 +4,6 @@ class Ztm < Formula
   url "https://github.com/flomesh-io/ztm.git", tag: "v0.2.0"
   license "Apache-2.0"
 
-  depends_on "brotli" => :build
   depends_on "cmake" => :build
   depends_on "node" => :build
   depends_on "openssl@3" => :build
@@ -19,7 +18,6 @@ class Ztm < Formula
     odie "Node.js version 16 or later is required. Detected: #{node_version}" if major_version < 16
 
     openssl = Formula["openssl@3"]
-    brotli = Formula["brotli"]
 
     if OS.mac?
       clang = `xcrun --find clang`.chomp
@@ -31,8 +29,6 @@ class Ztm < Formula
 
     cd "gui" do
       system "npm", "install", *std_npm_args(prefix: false)
-      # system "npm", "install", *std_npm_args(prefix: false), "vite"
-      # bin.install_symlink Dir["#{libexec}/bin/*"]
 
       system "npm", "run", "build"
       # system "npm", "run", "build:apps"
@@ -45,7 +41,6 @@ class Ztm < Formula
 
     cd "pipy" do
       system "npm", "install", *std_npm_args(prefix: false)
-      # bin.install_symlink Dir["#{libexec}/bin/*"]
     end
 
     version = ENV["ZTM_VERSION"] || `git describe --abbrev=0 --tags`.strip
@@ -76,7 +71,6 @@ class Ztm < Formula
         "-DCMAKE_CXX_COMPILER=#{clangpp}",
         "-DPIPY_GUI=OFF",
         "-DPIPY_OPENSSL=#{openssl.opt_prefix}",
-        "-DPIPY_BROTLI=#{brotli.opt_prefix}",
         "-DCMAKE_CXX_FLAGS=-stdlib=libc++",
         "-DPIPY_CODEBASES=ON",
         "-DPIPY_CUSTOM_CODEBASES=ztm/ca:../ca,ztm/hub:../hub,ztm/agent:../agent,ztm/cli:../cli",
