@@ -5,8 +5,8 @@ class Ztm < Formula
   license "Apache-2.0"
 
   depends_on "cmake" => :build
-  depends_on "node" => :build
   depends_on "brotli" => :build
+  depends_on "node" => :build
   depends_on "openssl@3" => :build
 
   on_linux do
