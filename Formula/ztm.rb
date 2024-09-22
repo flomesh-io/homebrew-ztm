@@ -4,8 +4,8 @@ class Ztm < Formula
   url "https://github.com/flomesh-io/ztm.git", tag: "v0.2.0"
   license "Apache-2.0"
 
-  depends_on "ninja" => :build
   depends_on "cmake" => :build
+  depends_on "ninja" => :build
   depends_on "node" => :build
   depends_on "openssl@3" => :build
 
