@@ -4,13 +4,22 @@ on:
     branches:
       - main
   pull_request:
+    branches:
+      - main
 env:
+  HOMEBREW_NO_AUTO_UPDATE: 1
   HOMEBREW_NO_INSTALL_FROM_API: 1
+  HOMEBREW_VERBOSE: 1
+  HOMEBREW_DEBUG: 1
+  HOMEBREW_RETRY: 3
+  HOMEBREW_MAKE_JOBS: 2
+  HOMEBREW_BUILD_FROM_SOURCE: 0
 jobs:
   test-bot:
+    timeout-minutes: 120
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Set up Homebrew
@@ -19,7 +28,7 @@ jobs:
 
       - name: Cache Homebrew Bundler RubyGems
         id: cache
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ${{ steps.set-up-homebrew.outputs.gems-path }}
           key: ${{ runner.os }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
@@ -29,17 +38,17 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: brew install-bundler-gems
 
-      - run: brew test-bot --only-cleanup-before
+      - run: brew test-bot --only-cleanup-before --verbose --debug
 
-      - run: brew test-bot --only-setup
+      - run: brew test-bot --only-setup --verbose --debug
 
-      - run: brew test-bot --only-tap-syntax
+      - run: brew test-bot --only-tap-syntax --verbose --debug
 
-      - run: brew test-bot --only-formulae
-        if: github.event_name == 'pull_request'
+      - run: brew test-bot --only-formulae --verbose --debug
+        if: github.event_name == 'pull_request' || github.event_name == 'push'
 
       - name: Upload bottles as artifact
-        if: always() && github.event_name == 'pull_request'
+        if: always()
         uses: actions/upload-artifact@main
         with:
           name: bottles
