@@ -1,0 +1,80 @@
+class Ztm < Formula
+  desc "ZTM (Zero Trust Mesh) is a privacy-first open-source decentralized network software based on HTTP/2 tunnels. Experience boundless connectivity and mesh the globe!"
+  homepage "https://github.com/flomesh-io/ztm"
+  url "https://github.com/flomesh-io/ztm.git", :tag => "v0.2.0"
+
+  license "Apache-2.0"
+  version "v0.2.0"
+
+  depends_on "cmake" => :build
+  depends_on "node" => [:build, ">= 16"]
+  depends_on "openssl@3" => :build
+
+  def install
+    openssl = Formula["openssl@3"]
+    clang = `xcrun --find clang`.chomp
+    clangpp = `xcrun --find clang++`.chomp
+
+    cd "gui" do
+       system "npm", "install", "--no-audit"
+      system "npm", "run", "build"
+      #system "npm", "run", "build:apps"
+      system "npm", "run", "build:tunnel"
+      system "npm", "run", "build:proxy"
+      system "npm", "run", "build:script"
+    end
+
+    system "git", "submodule", "update", "--init"
+    
+    cd "pipy" do
+      system "npm", "install", "--no-audit"
+    end
+
+    version = ENV["ZTM_VERSION"] || `git describe --abbrev=0 --tags`.strip
+    commit = `git log -1 --format=%H`.strip
+    commit_date = `git log -1 --format=%cD`.strip
+
+    version_json = <<~EOS
+      {
+        "version": "#{version}",
+        "commit": "#{commit}",
+        "date": "#{commit_date}"
+      }
+    EOS
+
+    (buildpath/"cli/version.json").write version_json
+    (buildpath/"agent/version.json").write version_json
+
+    File.write("version.env", <<~EOS)
+      VERSION="#{version}"
+      COMMIT="#{commit}"
+      COMMIT_DATE="#{commit_date}"
+    EOS
+
+
+    mkdir "pipy/build" do
+      cmake_args = std_cmake_args + [
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_C_COMPILER=#{clang}",
+        "-DCMAKE_CXX_COMPILER=#{clangpp}",
+        "-DPIPY_GUI=OFF",
+        "-DPIPY_OPENSSL=#{openssl.opt_prefix}",
+        "-DCMAKE_CXX_FLAGS=-stdlib=libc++",
+        "-DPIPY_CODEBASES=ON",
+        "-DPIPY_CUSTOM_CODEBASES=ztm/ca:../ca,ztm/hub:../hub,ztm/agent:../agent,ztm/cli:../cli",
+        '-DPIPY_DEFAULT_OPTIONS=repo://ztm/cli --args'
+      ]
+
+      system "cmake", "..", *cmake_args
+      system "make", "-j"
+    end
+
+
+    bin.install "pipy/bin/pipy" => "ztm"
+  end
+
+  test do
+    system "#{bin}/ztm", "--version"
+  end
+end
+
