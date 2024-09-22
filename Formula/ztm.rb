@@ -8,18 +8,30 @@ class Ztm < Formula
   depends_on "node" => :build
   depends_on "openssl@3" => :build
 
+  on_macos do
+    depends_on "xcode" => :build
+  end
+
   def install
     node_version = `node -v`.strip
     major_version = node_version.split(".")[0].delete_prefix("v").to_i
     odie "Node.js version 16 or later is required. Detected: #{node_version}" if major_version < 16
 
     openssl = Formula["openssl@3"]
-    clang = `xcrun --find clang`.chomp
-    clangpp = `xcrun --find clang++`.chomp
+
+    if OS.mac?
+      clang = `xcrun --find clang`.chomp
+      clangpp = `xcrun --find clang++`.chomp
+    else
+      clang = "clang"
+      clangpp = "clang++"
+    end
 
     cd "gui" do
-      system "npm", "install", *std_npm_args, "--production=false"
+      system "npm", "install", *std_npm_args
+      system "npm", "install", *std_npm_args, "vite"
       bin.install_symlink Dir["#{libexec}/bin/*"]
+
       system "npm", "run", "build"
       # system "npm", "run", "build:apps"
       system "npm", "run", "build:tunnel"
@@ -30,7 +42,7 @@ class Ztm < Formula
     system "git", "submodule", "update", "--init"
 
     cd "pipy" do
-      system "npm", "install", *std_npm_args, "--production=false"
+      system "npm", "install", *std_npm_args
       bin.install_symlink Dir["#{libexec}/bin/*"]
     end
 
