@@ -19,6 +19,7 @@ class Ztm < Formula
 
     cd "gui" do
       system "npm", "install", *std_npm_args
+      system "npm", "install", "vite", "--save-dev"
       system "npm", "run", "build"
       # system "npm", "run", "build:apps"
       system "npm", "run", "build:tunnel"
