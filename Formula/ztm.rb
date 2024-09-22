@@ -1,22 +1,28 @@
 class Ztm < Formula
-  desc "ZTM is a privacy-first, open-source software for decentralized HTTP/2 tunnels."
+  desc "Zerto Trust Mesh (ZTM) is open-source software for decentralized HTTP/2 tunnels."
   homepage "https://github.com/flomesh-io/ztm"
-  url "https://github.com/flomesh-io/ztm.git", :tag => "v0.2.0"
+  url "https://github.com/flomesh-io/ztm.git", tag: "v0.2.0"
 
   license "Apache-2.0"
-  version "v0.2.0"
+  version "0.2.0"
 
   depends_on "cmake" => :build
-  depends_on "node" => [:build, ">= 16"]
+  depends_on "node" => :build
   depends_on "openssl@3" => :build
 
   def install
+    node_version = `node -v`.strip
+    major_version = node_version.split(".")[0].delete_prefix("v").to_i
+    if major_version < 16
+      odie "Node.js version 16 or later is required. Detected: #{node_version}"
+    end
+  
     openssl = Formula["openssl@3"]
     clang = `xcrun --find clang`.chomp
     clangpp = `xcrun --find clang++`.chomp
 
     cd "gui" do
-       system "npm", "install", "--no-audit"
+      system "npm", "install", *std_npm_args
       system "npm", "run", "build"
       #system "npm", "run", "build:apps"
       system "npm", "run", "build:tunnel"
@@ -27,7 +33,7 @@ class Ztm < Formula
     system "git", "submodule", "update", "--init"
     
     cd "pipy" do
-      system "npm", "install", "--no-audit"
+      system "npm", "install", *std_npm_args
     end
 
     version = ENV["ZTM_VERSION"] || `git describe --abbrev=0 --tags`.strip
