@@ -18,8 +18,7 @@ class Ztm < Formula
     clangpp = `xcrun --find clang++`.chomp
 
     cd "gui" do
-      system "npm", "install", *std_npm_args
-      system "npm", "install", "vite", "--save-dev"
+      system "npm", "install", "--production=false", *std_npm_args
       system "npm", "run", "build"
       # system "npm", "run", "build:apps"
       system "npm", "run", "build:tunnel"
