@@ -1,5 +1,5 @@
 class Ztm < Formula
-  desc "ZTM (Zero Trust Mesh) is a privacy-first open-source decentralized network software based on HTTP/2 tunnels. Experience boundless connectivity and mesh the globe!"
+  desc "ZTM is a privacy-first, open-source software for decentralized HTTP/2 tunnels."
   homepage "https://github.com/flomesh-io/ztm"
   url "https://github.com/flomesh-io/ztm.git", :tag => "v0.2.0"
 
