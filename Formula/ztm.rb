@@ -8,6 +8,10 @@ class Ztm < Formula
   depends_on "node" => :build
   depends_on "openssl@3" => :build
 
+  on_linux do
+    depends_on "llvm" => :build
+  end
+
   def install
     node_version = `node -v`.strip
     major_version = node_version.split(".")[0].delete_prefix("v").to_i
