@@ -7,9 +7,16 @@ on:
     branches:
       - main
 env:
+  HOMEBREW_NO_AUTO_UPDATE: 1
   HOMEBREW_NO_INSTALL_FROM_API: 1
+  HOMEBREW_VERBOSE: 1
+  HOMEBREW_DEBUG: 1
+  HOMEBREW_RETRY: 3
+  HOMEBREW_MAKE_JOBS: 2
+  HOMEBREW_BUILD_FROM_SOURCE: 0
 jobs:
   test-bot:
+    timeout-minutes: 120
     strategy:
       matrix:
         os: [ubuntu-latest, macos-13, macos-latest]
@@ -31,13 +38,13 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: brew install-bundler-gems
 
-      - run: brew test-bot --only-cleanup-before
+      - run: brew test-bot --only-cleanup-before --verbose --debug
 
-      - run: brew test-bot --only-setup
+      - run: brew test-bot --only-setup --verbose --debug
 
-      - run: brew test-bot --only-tap-syntax
+      - run: brew test-bot --only-tap-syntax --verbose --debug
 
-      - run: brew test-bot --only-formulae
+      - run: brew test-bot --only-formulae --verbose --debug
         if: github.event_name == 'pull_request' || github.event_name == 'push'
 
       - name: Upload bottles as artifact
