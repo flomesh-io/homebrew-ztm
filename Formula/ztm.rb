@@ -4,6 +4,11 @@ class Ztm < Formula
   url "https://github.com/flomesh-io/ztm.git", tag: "v0.2.0"
   license "Apache-2.0"
 
+  bottle do
+    root_url "https://github.com/flomesh-io/homebrew-ztm/releases/download/ztm-0.2.0"
+    sha256 arm64_sonoma: "0b3efd3b204e1d6a04eb6b26c3a919dff5be90602fd7e1204c1d21bd4ef9f379"
+  end
+
   depends_on "cmake" => :build
   depends_on "ninja" => :build
   depends_on "node" => :build
