@@ -6,8 +6,8 @@ class Ztm < Formula
 
   depends_on "cmake" => :build
   depends_on "node" => :build
-  depends_on "vite" => :build
   depends_on "openssl@3" => :build
+  depends_on "vite" => :build
 
   def install
     node_version = `node -v`.strip
@@ -19,7 +19,7 @@ class Ztm < Formula
     clangpp = `xcrun --find clang++`.chomp
 
     cd "gui" do
-      system "npm", "install",  *std_npm_args
+      system "npm", "install", *std_npm_args
       system "npm", "run", "build"
       # system "npm", "run", "build:apps"
       system "npm", "run", "build:tunnel"
