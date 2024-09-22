@@ -19,7 +19,7 @@ jobs:
     timeout-minutes: 120
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-13, macos-latest]
+        os: [macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Set up Homebrew
