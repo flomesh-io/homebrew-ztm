@@ -37,10 +37,7 @@ class Ztm < Formula
       system "npm", "install", *std_npm_args(prefix: false)
 
       system "npm", "run", "build"
-      # system "npm", "run", "build:apps"
-      system "npm", "run", "build:tunnel"
-      system "npm", "run", "build:proxy"
-      system "npm", "run", "build:script"
+      system "npm", "run", "build:apps"
     end
 
     system "git", "submodule", "update", "--init"
