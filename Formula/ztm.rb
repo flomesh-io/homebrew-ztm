@@ -6,7 +6,8 @@ class Ztm < Formula
 
   bottle do
     root_url "https://github.com/flomesh-io/homebrew-ztm/releases/download/ztm-0.3.0"
-    sha256 arm64_sonoma: "9d52bcb41030536a8319a4283e0f4c00b47f06a7bba876043e2492274f0c73b0"
+    rebuild 1
+    sha256 arm64_sonoma: "511b59ff0e9c6d1042e82ccba5eba7df6f047df456fc1aebb3d08b7690ef6f07"
   end
 
   depends_on "cmake" => :build
