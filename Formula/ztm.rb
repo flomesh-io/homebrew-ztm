@@ -1,7 +1,7 @@
 class Ztm < Formula
   desc "Zerto Trust Mesh (ZTM) is open-source software for decentralized HTTP/2 tunnels"
   homepage "https://github.com/flomesh-io/ztm"
-  url "https://github.com/flomesh-io/ztm.git", tag: "v0.3.0"
+  url "https://github.com/flomesh-io/ztm.git", tag: "v0.3.1"
   license "Apache-2.0"
 
   bottle do
