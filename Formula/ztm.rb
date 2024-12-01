@@ -5,8 +5,8 @@ class Ztm < Formula
   license "Apache-2.0"
 
   bottle do
-    root_url "https://github.com/flomesh-io/homebrew-ztm/releases/download/ztm-0.9.0"
-    sha256 arm64_sonoma: "4266a73724a935d8f114a4bb541c3d573e20c0dda442fa4c530b36a2204e7d63"
+    root_url "https://github.com/flomesh-io/homebrew-ztm/releases/download/ztm-1.0.0-rc1"
+    sha256 arm64_sonoma: "d8aa88d6569445afaab2e2bc5a61f94f9521d6a13c6d9a73c58b018527dfa91b"
   end
 
   depends_on "cmake" => :build
