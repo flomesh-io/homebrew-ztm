@@ -72,6 +72,7 @@ class Ztm < Formula
         "-DCMAKE_BUILD_TYPE=Release",
         "-DCMAKE_C_COMPILER=#{clang}",
         "-DCMAKE_CXX_COMPILER=#{clangpp}",
+        "-DCMAKE_POLICY_VERSION_MINIMUM=3.5",
         "-DPIPY_GUI=OFF",
         "-DPIPY_OPENSSL=#{openssl.opt_prefix}",
         "-DCMAKE_CXX_FLAGS=-stdlib=libc++",
